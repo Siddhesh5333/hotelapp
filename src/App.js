@@ -1,13 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
-import Login from './login';
+import Navbar from './Components/Navbar.jsx'
+import Rooms from './Components/Rooms.jsx'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-      <Login/>
-      </header>
+      <Navbar/>
+      <Rooms/>
+
     </div>
   );
 }
