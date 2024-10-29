@@ -1,32 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Navbar.css';
 
-function Navbar() {
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <nav className="navbar">
-      <div className="navbar-brand">
-        <a href="#">Hotel Rooms</a>
+      <div className="logo">  Dzyris Infotech</div>
+      <div className={`menu ${isOpen ? 'open' : ''}`}>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
       </div>
-      <ul className="navbar-nav">
-        <li className="nav-item">
-          <a href="#" className="nav-link">Home</a>
-        </li>
-        <li className="nav-item">
-          <a href="#" className="nav-link">About</a>
-        </li>
-        <li className="nav-item">
-          <a href="#" className="nav-link">Contact</a>
-        </li>
-      </ul>
-      <div className="navbar-toggler">
-        <button className="toggler-btn">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+      <div className="hamburger" onClick={toggleMenu}>
+        <div className="bar"></div>
+        <div className="bar"></div>
+        <div className="bar"></div>
       </div>
     </nav>
   );
-}
+};
 
 export default Navbar;

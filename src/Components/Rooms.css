@@ -1,25 +1,88 @@
+/* Rooms.css */
 
-  .ant-card {
-    margin-bottom: 20px; /* Space between cards */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for card */
-  }
-  
-  .ant-card-head {
-    background-color: #002344 !important; /* Blue header */
-    color: white !important; /* White text for header */
-    font-size: 1.5rem !important; /* Larger font size */
-    text-align: center !important; /* Center the header text */
-  }
-  
-  .ant-card-grid {
-    border: 1px solid #e8e8e8; /* Border around grid items */
-    transition: all 0.3s ease; /* Smooth transition */
-    cursor: pointer; /* Cursor indicates clickable */
-  }
-  
-  .ant-card-grid:hover {
-    background-color: #9de0ff; /* Light blue background on hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Shadow effect on hover */
-  }
-  
+.room-container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  width: 100vw; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  overflow-y: hidden; /* Prevent scrolling if not needed */
+  background-color: #9fc0ff; /* Light background */
+}
+
+.room-card {
+  flex: 1;
+  min-height: 100%; /* Fill parent height */
+  max-height: 100%;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.room-card .ant-card-head-title {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #000000 !important; /* Stylish blue color for title */
+}
+
+.floor-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1rem !important;
+  margin-top: -1%;
+  color: #0400ff !important;
+}
+
+.room-grid {
+  width: 30% !important;
+  height: 15% !important;
+  text-align: center;
+  cursor: pointer;
+  padding: 11% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 450;
+  color: #2b2b2b;
+  transition: transform 0.3s, background-color 0.3s, color 0.3s;
+  border-radius: 10px !important;
+  box-sizing: border-box;
+}
+
+.room-grid:hover {
+  transform: scale(1.05);
+  background-color: #e6f7ff;
+  color: #1890ff;
+}
+
+.room-grid-selected {
+  background-color: #bae7ff;
+  border: 1px solid #91d5ff;
+}
+
+.room-details-card {
+  flex: 1;
+  min-height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.room-details-card .ant-typography {
+  margin-bottom: 12px;
+}
+
+.room-details-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #1890ff;
+}
+
+.room-details-section {
+  font-weight: bold;
+  margin-top: 12px;
+  color: #555;
+}

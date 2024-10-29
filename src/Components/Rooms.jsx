@@ -1,67 +1,93 @@
-import React from 'react';
-import { Card } from 'antd';
+import React, { useState } from 'react';
+import { Card, Col, Row, Typography, Space } from 'antd';
 import './Rooms.css';
 
-const gridStyle = {
-  width: '25%',
-  textAlign: 'center',
+const defaultRoomDetails = {
+  name: 'Room',
+  description: 'A standard room with basic amenities.',
+  amenities: ['Wi-Fi', 'TV'],
+  capacity: 2,
+  price: '$100/night',
 };
 
-const Rooms = () => (
-  <div>
-    <Card className='.ant-card-head' title="Ground Floor">
-      <Card.Grid style={gridStyle}>001</Card.Grid>
-      <Card.Grid hoverable={false} style={gridStyle}>
-        002
-      </Card.Grid>
-      <Card.Grid style={gridStyle}>003</Card.Grid>
-      <Card.Grid style={gridStyle}>004</Card.Grid>
-      <Card.Grid style={gridStyle}>005</Card.Grid>
-      <Card.Grid style={gridStyle}>006</Card.Grid>
-      <Card.Grid style={gridStyle}>007</Card.Grid>
-      <Card.Grid style={gridStyle}>008</Card.Grid>
-    </Card>
+const roomDetails = {
+  '001': {
+    name: 'Room 001',
+    description: 'A cozy, comfortable room with a modern interior.',
+    amenities: ['Wi-Fi', 'TV', 'Mini Fridge'],
+    capacity: 2,
+    price: '$100/night',
+  },
+  '101': {
+    name: 'Room 101',
+    description: 'Spacious room with beautiful city views.',
+    amenities: ['Wi-Fi', 'TV', 'Balcony'],
+    capacity: 3,
+    price: '$150/night',
+  },
+  // Add more specific room details as needed...
+};
 
-    {/* Second identical grid */}
-    <Card title="First Floor">
-      <Card.Grid style={gridStyle}>101</Card.Grid>
-      <Card.Grid hoverable={false} style={gridStyle}>
-        102
-      </Card.Grid>
-      <Card.Grid style={gridStyle}>103</Card.Grid>
-      <Card.Grid style={gridStyle}>104</Card.Grid>
-      <Card.Grid style={gridStyle}>105</Card.Grid>
-      <Card.Grid style={gridStyle}>106</Card.Grid>
-      <Card.Grid style={gridStyle}>107</Card.Grid>
-      <Card.Grid style={gridStyle}>108</Card.Grid>
-    </Card>
+const Rooms = () => {
+  const [selectedRoom, setSelectedRoom] = useState(null);
 
-    <Card title="Second Floor">
-      <Card.Grid style={gridStyle}>201</Card.Grid>
-      <Card.Grid hoverable={false} style={gridStyle}>
-        202
-      </Card.Grid>
-      <Card.Grid style={gridStyle}>203</Card.Grid>
-      <Card.Grid style={gridStyle}>204</Card.Grid>
-      <Card.Grid style={gridStyle}>205</Card.Grid>
-      <Card.Grid style={gridStyle}>206</Card.Grid>
-      <Card.Grid style={gridStyle}>207</Card.Grid>
-      <Card.Grid style={gridStyle}>208</Card.Grid>
-    </Card>
+  const handleRoomClick = (roomNumber) => {
+    setSelectedRoom(roomNumber);
+  };
 
-    <Card title="Third Floor">
-      <Card.Grid style={gridStyle}>301</Card.Grid>
-      <Card.Grid hoverable={false} style={gridStyle}>
-        302
-      </Card.Grid>
-      <Card.Grid style={gridStyle}>303</Card.Grid>
-      <Card.Grid style={gridStyle}>304</Card.Grid>
-      <Card.Grid style={gridStyle}>305</Card.Grid>
-      <Card.Grid style={gridStyle}>306</Card.Grid>
-      <Card.Grid style={gridStyle}>307</Card.Grid>
-      <Card.Grid style={gridStyle}>308</Card.Grid>
-    </Card>
-  </div>
-);
+  const currentRoomDetails = roomDetails[selectedRoom] || {
+    ...defaultRoomDetails,
+    name: `Room ${selectedRoom}`,
+  };
+
+  return (
+    <div className="room-container">
+      <Card title="Rooms" className="room-card">
+        <Row gutter={[18, 18]}>
+          {['Ground Floor', 'First Floor', 'Second Floor', 'Third Floor'].map((floor, index) => (
+            <Col span={24} key={index}>
+              <Typography.Title level={4} className="floor-title">{floor}</Typography.Title>
+              <Row gutter={16}>
+                {[...Array(8)].map((_, i) => {
+                  const roomNumber = `${index}${String(i + 1).padStart(2, '0')}`;
+                  return (
+                    <Col key={roomNumber} span={6}>
+                      <Card.Grid
+                        className={`room-grid ${selectedRoom === roomNumber ? 'room-grid-selected' : ''}`}
+                        onClick={() => handleRoomClick(roomNumber)}
+                      >
+                      {roomNumber}
+                      </Card.Grid>
+                    </Col>
+                  );
+                })}
+              </Row>
+            </Col>
+          ))}
+        </Row>
+      </Card>
+
+      <Card title="Room Details" className="room-details-card">
+        {selectedRoom ? (
+          <Space direction="vertical">
+            <Typography.Title level={4} className="room-details-title">{currentRoomDetails.name}</Typography.Title>
+            <Typography.Text className="room-details-section">Description:</Typography.Text>
+            <Typography.Paragraph>{currentRoomDetails.description}</Typography.Paragraph>
+            <Typography.Text className="room-details-section">Amenities:</Typography.Text>
+            <Typography.Paragraph>
+              {currentRoomDetails.amenities.join(', ')}
+            </Typography.Paragraph>
+            <Typography.Text className="room-details-section">Capacity:</Typography.Text>
+            <Typography.Paragraph>{currentRoomDetails.capacity} person(s)</Typography.Paragraph>
+            <Typography.Text className="room-details-section">Price:</Typography.Text>
+            <Typography.Paragraph>{currentRoomDetails.price}</Typography.Paragraph>
+          </Space>
+        ) : (
+          <Typography.Paragraph>Select a room to view its details.</Typography.Paragraph>
+        )}
+      </Card>
+    </div>
+  );
+};
 
 export default Rooms;
