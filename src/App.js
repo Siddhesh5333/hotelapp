@@ -1,16 +1,19 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import Navbar from './Components/Navbar.jsx'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Rooms from './Components/Rooms.jsx'
-
+import Login from './Components/Login.jsx'
 function App() {
-  return (
-    <div className="App">
-      <Navbar/>
-      <Rooms/>
-
-    </div>
-  );
+  
+    return (
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/rooms" element={<Rooms />} />
+        </Routes>
+      </Router>
+    );
 }
 
 export default App;
