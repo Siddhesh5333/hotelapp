@@ -19,10 +19,13 @@ const Navbar = () => {
           <li><a href="#contact">Contact</a></li>
         </ul>
       </div>
-      <div className="hamburger" onClick={toggleMenu}>
-        <div className="bar"></div>
-        <div className="bar"></div>
-        <div className="bar"></div>
+     
+      <div className="navbar-toggler">
+        <button className="toggler-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
     </nav>
   );
