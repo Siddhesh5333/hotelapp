@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Form, Input, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import Navbar from './Navbar.jsx'
 
 const gridStyle = {
   width: '100%',
@@ -18,6 +19,7 @@ const Login = () => {
 
   return (
     <div>
+      <Navbar/>
      
       <Card title="Login Page">
         <Card.Grid style={gridStyle}>
