@@ -10,6 +10,7 @@ const RoomFilter = ({ onFilterChange, onFloorChange, onRoomTypeChange }) => {
   return (
     <div className="room-filter">
       <Space>
+        {/* Filter for Room Status */}
         <Select
           placeholder="Select Room Status"
           style={{ width: 160 }}
@@ -21,6 +22,7 @@ const RoomFilter = ({ onFilterChange, onFloorChange, onRoomTypeChange }) => {
           <Option value="onHold">On Hold Rooms</Option>
         </Select>
 
+        {/* Filter for Floor */}
         <Select
           placeholder="Select Floor"
           style={{ width: 160 }}
@@ -34,6 +36,7 @@ const RoomFilter = ({ onFilterChange, onFloorChange, onRoomTypeChange }) => {
           ))}
         </Select>
 
+        {/* Filter for Room Type */}
         <Select
           placeholder="Select Room Type"
           style={{ width: 160 }}

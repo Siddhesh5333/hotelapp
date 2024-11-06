@@ -29,6 +29,51 @@ const roomDetails = {
     price: '₹ 1000/night',
     image: delux,
   },
+  '103': {
+    name: 'Room 103',
+    type: 'Delux Room',
+    description: 'A cozy, comfortable room with a modern interior.',
+    amenities: ['Wi-Fi', 'TV', 'Mini Fridge'],
+    capacity: 2,
+    price: '₹ 1000/night',
+    image: delux,
+  },
+  '201': {
+    name: 'Room 201',
+    type: 'Delux Room',
+    description: 'A cozy, comfortable room with a modern interior.',
+    amenities: ['Wi-Fi', 'TV', 'Mini Fridge'],
+    capacity: 2,
+    price: '₹ 1000/night',
+    image: delux,
+  },
+  '301': {
+    name: 'Room 301',
+    type: 'Delux Room',
+    description: 'A cozy, comfortable room with a modern interior.',
+    amenities: ['Wi-Fi', 'TV', 'Mini Fridge'],
+    capacity: 2,
+    price: '₹ 1000/night',
+    image: delux,
+  },
+  '305': {
+    name: 'Room 305',
+    type: 'Delux Room',
+    description: 'A cozy, comfortable room with a modern interior.',
+    amenities: ['Wi-Fi', 'TV', 'Mini Fridge'],
+    capacity: 2,
+    price: '₹ 1000/night',
+    image: delux,
+  },
+  '208': {
+    name: 'Room 208',
+    type: 'Delux Room',
+    description: 'A cozy, comfortable room with a modern interior.',
+    amenities: ['Wi-Fi', 'TV', 'Mini Fridge'],
+    capacity: 2,
+    price: '₹ 1000/night',
+    image: delux,
+  },
   '101': {
     name: 'Room 101',
     type: 'Sweet Room',
@@ -47,6 +92,25 @@ const roomDetails = {
     price: '₹ 750/night',
     image: sweet,
   },
+  '202': {
+    name: 'Room 202',
+    type: 'Sweet Room',
+    description: 'A comfortable room with essential amenities for a relaxing stay.',
+    amenities: ['Wi-Fi', 'TV'],
+    capacity: 2,
+    price: '₹ 750/night',
+    image: sweet,
+  },
+  '302': {
+    name: 'Room 302',
+    type: 'Sweet Room',
+    description: 'A comfortable room with essential amenities for a relaxing stay.',
+    amenities: ['Wi-Fi', 'TV'],
+    capacity: 2,
+    price: '₹ 750/night',
+    image: sweet,
+  },
+  
 };
 
 const roomNumbersByFloor = {
@@ -65,7 +129,7 @@ const Rooms = () => {
   const [dates, setDates] = useState([]);
   const [bookingDetails, setBookingDetails] = useState({});
   const [filter, setFilter] = useState('all');
-  const [floorFilter, setFloorFilter] = useState('allFloors'); 
+  const [floorFilter, setFloorFilter] = useState('allFloors');
   const [roomTypeFilter, setRoomTypeFilter] = useState('allTypes');
 
   const handleRoomClick = (roomNumber) => {
@@ -180,6 +244,10 @@ const Rooms = () => {
                         if (filter === 'onHold') return onHoldRooms.includes(roomNumber);
                         return true;
                       })
+                      .filter(roomNumber => {
+                        const room = getRoomDetails(roomNumber);
+                        return roomTypeFilter === 'allTypes' || room.type === roomTypeFilter;
+                      })
                       .map(roomNumber => {
                         const isBooked = bookedRooms.includes(roomNumber);
                         const isOnHold = onHoldRooms.includes(roomNumber);
@@ -194,9 +262,7 @@ const Rooms = () => {
                             >
                               {roomNumber}
                             </Card.Grid>
-                            
                           </Col>
-                          
                         );
                       })}
                   </Row>
