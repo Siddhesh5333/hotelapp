@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Card, Col, Row, Typography, Space, Image, Button, Modal, DatePicker } from 'antd';
 import './Rooms.css';
 import Navbar from './Navbar.jsx';
+import RoomFilter from './RoomFilter.jsx';
 import sweet from './images/sweet.jpg';
 import standard from './images/standard.png';
 import delux from './images/delux.png';
@@ -48,18 +49,28 @@ const roomDetails = {
   },
 };
 
+const roomNumbersByFloor = {
+  'Ground Floor': ['001', '002', '003', '004', '005', '006', '007', '008'],
+  'First Floor': ['101', '102', '103', '104', '105', '106', '107', '108'],
+  'Second Floor': ['201', '202', '203', '204', '205', '206', '207', '208'],
+  'Third Floor': ['301', '302', '303', '304', '305', '306', '307', '308'],
+};
+
 const Rooms = () => {
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [bookedRooms, setBookedRooms] = useState([]);
-  const [onHoldRooms, setOnHoldRooms] = useState([]); // New state for held rooms
+  const [onHoldRooms, setOnHoldRooms] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isBookedRoomModalVisible, setIsBookedRoomModalVisible] = useState(false);
   const [dates, setDates] = useState([]);
   const [bookingDetails, setBookingDetails] = useState({});
+  const [filter, setFilter] = useState('all');
+  const [floorFilter, setFloorFilter] = useState('allFloors'); 
+  const [roomTypeFilter, setRoomTypeFilter] = useState('allTypes');
 
   const handleRoomClick = (roomNumber) => {
     setSelectedRoom(roomNumber);
-  
+
     if (bookedRooms.includes(roomNumber)) {
       const roomBooking = bookingDetails[roomNumber];
       setDates([roomBooking.checkIn, roomBooking.checkOut]);
@@ -72,7 +83,7 @@ const Rooms = () => {
 
   const handleHold = () => {
     if (selectedRoom && !onHoldRooms.includes(selectedRoom)) {
-      setOnHoldRooms([...onHoldRooms, selectedRoom]); // Add room to held state
+      setOnHoldRooms([...onHoldRooms, selectedRoom]);
       alert(`Room ${selectedRoom} placed on hold.`);
     }
   };
@@ -95,7 +106,7 @@ const Rooms = () => {
 
   const handleRelease = () => {
     if (onHoldRooms.includes(selectedRoom)) {
-      setOnHoldRooms(onHoldRooms.filter(room => room !== selectedRoom)); // Remove from held state
+      setOnHoldRooms(onHoldRooms.filter(room => room !== selectedRoom));
       alert(`Room ${selectedRoom} has been released from hold.`);
     } else {
       setBookedRooms(bookedRooms.filter(room => room !== selectedRoom));
@@ -104,12 +115,9 @@ const Rooms = () => {
       setBookingDetails(updatedBookingDetails);
       alert(`Room ${selectedRoom} has been released.`);
     }
-    
-    // Clear selected dates and reset room selection
+
     setDates([]);
     setSelectedRoom(null);
-    
-    // Close the booked room modal
     setIsBookedRoomModalVisible(false);
   };
 
@@ -118,40 +126,82 @@ const Rooms = () => {
     setIsBookedRoomModalVisible(false);
   };
 
-  const currentRoomDetails = roomDetails[selectedRoom] || {
+  const handleFilterChange = (status) => {
+    setFilter(status);
+  };
+
+  const handleFloorChange = (floor) => {
+    setFloorFilter(floor);
+  };
+
+  const handleRoomTypeChange = (value) => {
+    setRoomTypeFilter(value);
+  };
+
+  const filteredRooms = Object.keys(roomDetails).filter(roomNumber => {
+    const room = roomDetails[roomNumber];
+    const matchesType = roomTypeFilter === 'allTypes' || room.type === roomTypeFilter;
+    const matchesFloor = floorFilter === 'allFloors' || roomNumbersByFloor[floorFilter]?.includes(roomNumber);
+    const matchesStatus = 
+      filter === 'all' ||
+      (filter === 'booked' && bookedRooms.includes(roomNumber)) ||
+      (filter === 'available' && !bookedRooms.includes(roomNumber) && !onHoldRooms.includes(roomNumber)) ||
+      (filter === 'onHold' && onHoldRooms.includes(roomNumber));
+    
+    return matchesType && matchesFloor && matchesStatus;
+  });
+
+  const getRoomDetails = (roomNumber) => roomDetails[roomNumber] || {
     ...defaultRoomDetails,
-    name: `Room ${selectedRoom}`,
+    name: `Room ${roomNumber}`,
   };
 
   return (
     <div>
-      <Navbar/>
+      <Navbar />
+      <RoomFilter 
+        onFilterChange={handleFilterChange} 
+        onFloorChange={handleFloorChange} 
+        onRoomTypeChange={handleRoomTypeChange}
+      />
+
       <div className="room-container">
         <Card title="Rooms" className="room-card">
           <Row gutter={[18, 18]}>
-            {['Ground Floor', 'First Floor', 'Second Floor', 'Third Floor'].map((floor, index) => (
-              <Col span={24} key={index}>
-                <Typography.Title level={4} className="floor-title">{floor}</Typography.Title>
-                <Row gutter={16}>
-                  {[...Array(8)].map((_, i) => {
-                    const roomNumber = `${index}${String(i + 1).padStart(2, '0')}`;
-                    const isBooked = bookedRooms.includes(roomNumber);
-                    const isOnHold = onHoldRooms.includes(roomNumber); // Check if room is on hold
+            {Object.keys(roomNumbersByFloor).map((floor, index) => (
+              (floorFilter === 'allFloors' || floorFilter === floor) && (
+                <Col span={24} key={index}>
+                  <Typography.Title level={4} className="floor-title">{floor}</Typography.Title>
+                  <Row gutter={16}>
+                    {roomNumbersByFloor[floor]
+                      .filter(roomNumber => {
+                        if (filter === 'booked') return bookedRooms.includes(roomNumber);
+                        if (filter === 'available') return !bookedRooms.includes(roomNumber) && !onHoldRooms.includes(roomNumber);
+                        if (filter === 'onHold') return onHoldRooms.includes(roomNumber);
+                        return true;
+                      })
+                      .map(roomNumber => {
+                        const isBooked = bookedRooms.includes(roomNumber);
+                        const isOnHold = onHoldRooms.includes(roomNumber);
+                        const room = getRoomDetails(roomNumber);
 
-                    return (
-                      <Col key={roomNumber} span={6}>
-                        <Card.Grid
-                          className={`room-grid ${isBooked ? 'room-grid-booked' : ''} ${isOnHold ? 'room-grid-on-hold' : ''} ${selectedRoom === roomNumber ? 'room-grid-selected' : ''}`}
-                          onClick={() => handleRoomClick(roomNumber)}
-                          style={{ backgroundColor: isBooked ? 'red' : isOnHold ? 'yellow' : 'white' }} // Change background color if on hold
-                        >
-                          {roomNumber}
-                        </Card.Grid>
-                      </Col>
-                    );
-                  })}
-                </Row>
-              </Col>
+                        return (
+                          <Col key={roomNumber} span={6}>
+                            <Card.Grid
+                              className={`room-grid ${isBooked ? 'room-grid-booked' : ''} ${isOnHold ? 'room-grid-on-hold' : ''} ${selectedRoom === roomNumber ? 'room-grid-selected' : ''}`}
+                              onClick={() => handleRoomClick(roomNumber)}
+                              style={{ backgroundColor: isBooked ? 'red' : isOnHold ? 'yellow' : 'white' }}
+                            >
+                              {roomNumber}
+                            </Card.Grid>
+                            
+                          </Col>
+                          
+                        );
+                      })}
+                  </Row>
+                </Col>
+              )
             ))}
           </Row>
         </Card>
@@ -159,39 +209,31 @@ const Rooms = () => {
         <Card title="Room Details" className="room-details-card">
           {selectedRoom ? (
             <Space direction="vertical">
-              <Typography.Title level={4} className="room-details-title">{currentRoomDetails.name}</Typography.Title>
-              <Image
-                width={200}
-                src={currentRoomDetails.image}
-                alt={currentRoomDetails.name}
-                className="room-details-image"
-              />
+              <Typography.Title level={4} className="room-details-title">{getRoomDetails(selectedRoom).name}</Typography.Title>
+              <Image width={200} src={getRoomDetails(selectedRoom).image} alt={getRoomDetails(selectedRoom).name} className="room-details-image" />
               <Row gutter={16}>
                 <Col span={12}>
                   <Typography.Text className="room-details-section">Type:</Typography.Text>
-                  <Typography.Paragraph>{currentRoomDetails.type}</Typography.Paragraph>
+                  <Typography.Paragraph>{getRoomDetails(selectedRoom).type}</Typography.Paragraph>
                 </Col>
                 <Col span={12}>
                   <Typography.Text className="room-details-section">Price:</Typography.Text>
-                  <Typography.Paragraph>{currentRoomDetails.price}</Typography.Paragraph>
+                  <Typography.Paragraph>{getRoomDetails(selectedRoom).price}</Typography.Paragraph>
                 </Col>
               </Row>
               <Row gutter={16}>
                 <Col span={12}>
                   <Typography.Text className="room-details-section">Capacity:</Typography.Text>
-                  <Typography.Paragraph>{currentRoomDetails.capacity} person(s)</Typography.Paragraph>
+                  <Typography.Paragraph>{getRoomDetails(selectedRoom).capacity} person(s)</Typography.Paragraph>
                 </Col>
                 <Col span={12}>
                   <Typography.Text className="room-details-section">Amenities:</Typography.Text>
-                  <Typography.Paragraph>
-                    {currentRoomDetails.amenities.join(', ')}
-                  </Typography.Paragraph>
+                  <Typography.Paragraph>{getRoomDetails(selectedRoom).amenities.join(', ')}</Typography.Paragraph>
                 </Col>
               </Row>
               <Typography.Text className="room-details-section">Description:</Typography.Text>
-              <Typography.Paragraph>{currentRoomDetails.description}</Typography.Paragraph>
+              <Typography.Paragraph>{getRoomDetails(selectedRoom).description}</Typography.Paragraph>
 
-              {/* Show booking details if booked */}
               {bookedRooms.includes(selectedRoom) && (
                 <Space direction="vertical">
                   <Typography.Text className="room-details-section" type="success">This room is booked.</Typography.Text>
@@ -203,55 +245,41 @@ const Rooms = () => {
                   </Typography.Paragraph>
                   <Space>
                     <Button type="primary" onClick={handleRelease}>Release</Button>
+                    <Button onClick={handleHold}>Place on Hold</Button>
                   </Space>
                 </Space>
               )}
 
-              {/* Show hold status */}
-              {onHoldRooms.includes(selectedRoom) && (
-                <Space direction="vertical">
-                  <Typography.Text className="room-details-section" type="warning">This room is on hold.</Typography.Text>
-                  <Space>
-                    <Button type="primary" onClick={handleRelease}>Release</Button>
-                  </Space>
-                </Space>
-              )}
-
-              {/* Booking and Hold buttons if not booked */}
-              {!bookedRooms.includes(selectedRoom) && !onHoldRooms.includes(selectedRoom) && (
+              {!bookedRooms.includes(selectedRoom) && (
                 <Space>
-                  <Button type="primary" onClick={handleHold}>Hold</Button>
                   <Button type="primary" onClick={handleBooking}>Book</Button>
+                  <Button onClick={handleHold}>Place on Hold</Button>
                 </Space>
               )}
             </Space>
           ) : (
-            <Typography.Paragraph>Select a room to view its details.</Typography.Paragraph>
+            <Typography.Paragraph>Please select a room to view its details.</Typography.Paragraph>
           )}
         </Card>
-
-        {/* Modal for Check-In and Check-Out */}
-        <Modal title="Select Check-In and Check-Out Dates" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-          <RangePicker onChange={handleDateChange} />
-        </Modal>
-
-        {/* Modal for Booked Room Details */}
-        <Modal
-          title={`Room ${selectedRoom} Booking Details`}
-          visible={isBookedRoomModalVisible}
-          onOk={handleRelease}
-          onCancel={handleCancel}
-          okText="Release"
-          cancelText="Close"
-        >
-          {dates.length === 2 && (
-            <div>
-              <Typography.Paragraph><strong>Check-In:</strong> {dates[0].format('YYYY-MM-DD')}</Typography.Paragraph>
-              <Typography.Paragraph><strong>Check-Out:</strong> {dates[1].format('YYYY-MM-DD')}</Typography.Paragraph>
-            </div>
-          )}
-        </Modal>
       </div>
+
+      <Modal
+        title="Book Room"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <RangePicker value={dates} onChange={handleDateChange} />
+      </Modal>
+
+      <Modal
+        title="Room Already Booked"
+        visible={isBookedRoomModalVisible}
+        onOk={handleRelease}
+        onCancel={handleCancel}
+      >
+        <Typography.Text>The selected room is already booked. Would you like to release it?</Typography.Text>
+      </Modal>
     </div>
   );
 };
