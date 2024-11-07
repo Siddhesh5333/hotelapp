@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Card, Col, Row, Typography, Space, Image, Button, Modal, DatePicker } from 'antd';
+import { Card, Col, Row, Typography, Space, Image, Button, Modal, DatePicker, Input, Select } from 'antd';
 import './Rooms.css';
 import Navbar from './Navbar.jsx';
 import RoomFilter from './RoomFilter.jsx';
 import sweet from './images/sweet.jpg';
 import standard from './images/standard.png';
 import delux from './images/delux.png';
-
+import moment from 'moment';
+const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const defaultRoomDetails = {
@@ -20,7 +21,7 @@ const defaultRoomDetails = {
 };
 
 const roomDetails = {
-  '001': {
+  'Delux 001': {
     name: 'Room 001',
     type: 'Delux Room',
     description: 'A cozy, comfortable room with a modern interior.',
@@ -114,7 +115,7 @@ const roomDetails = {
 };
 
 const roomNumbersByFloor = {
-  'Ground Floor': ['001', '002', '003', '004', '005', '006', '007', '008'],
+  'Ground Floor': ['Delux 001', 'Standard 002', '003', '004', '005', '006', '007', '008'],
   'First Floor': ['101', '102', '103', '104', '105', '106', '107', '108'],
   'Second Floor': ['201', '202', '203', '204', '205', '206', '207', '208'],
   'Third Floor': ['301', '302', '303', '304', '305', '306', '307', '308'],
@@ -131,13 +132,17 @@ const Rooms = () => {
   const [filter, setFilter] = useState('all');
   const [floorFilter, setFloorFilter] = useState('allFloors');
   const [roomTypeFilter, setRoomTypeFilter] = useState('allTypes');
+  const [guestName, setGuestName] = useState('');
+  const [guestAge, setGuestAge] = useState('');
+  const [guestGender, setGuestGender] = useState('');
 
   const handleRoomClick = (roomNumber) => {
     setSelectedRoom(roomNumber);
-
     if (bookedRooms.includes(roomNumber)) {
       const roomBooking = bookingDetails[roomNumber];
       setDates([roomBooking.checkIn, roomBooking.checkOut]);
+      setGuestName(roomBooking.guestName);
+      setGuestAge(roomBooking.guestAge);
     }
   };
 
@@ -156,17 +161,35 @@ const Rooms = () => {
     setDates(dates);
   };
 
-  const handleOk = () => {
-    if (selectedRoom && !bookedRooms.includes(selectedRoom) && dates.length === 2) {
+  const handleGenderChange = (value) => setGuestGender(value);
+
+    const handleOk = () => {
+    if (!guestName || !guestAge || !guestGender || dates.length !== 2) {
+      alert("Please fill in all fields (Check-in, Check-out, Guest Name, Age, and Gender).");
+      return;
+    }
+    if (selectedRoom && dates.length === 2) {
       setBookedRooms([...bookedRooms, selectedRoom]);
       setBookingDetails({
         ...bookingDetails,
-        [selectedRoom]: { checkIn: dates[0], checkOut: dates[1] },
+        [selectedRoom]: {
+          checkIn: dates[0],
+          checkOut: dates[1],
+          guestName,
+          guestAge,
+          guestGender,
+        },
       });
       setIsModalVisible(false);
       alert(`Room ${selectedRoom} booked from ${dates[0].format('YYYY-MM-DD')} to ${dates[1].format('YYYY-MM-DD')}`);
+      setGuestName('');
+      setGuestAge('');
+      setGuestGender('');
+      setDates([]);
     }
   };
+  const handleGuestNameChange = (e) => setGuestName(e.target.value);
+  const handleGuestAgeChange = (e) => setGuestAge(e.target.value);
 
   const handleRelease = () => {
     if (onHoldRooms.includes(selectedRoom)) {
@@ -181,13 +204,19 @@ const Rooms = () => {
     }
 
     setDates([]);
+    setGuestName('');
+    setGuestAge('');
     setSelectedRoom(null);
     setIsBookedRoomModalVisible(false);
+
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
-    setIsBookedRoomModalVisible(false);
+    setGuestName('');
+    setGuestAge('');
+    setGuestGender('');
+    setDates([]);
   };
 
   const handleFilterChange = (status) => {
@@ -236,7 +265,7 @@ const Rooms = () => {
               (floorFilter === 'allFloors' || floorFilter === floor) && (
                 <Col span={24} key={index}>
                   <Typography.Title level={4} className="floor-title">{floor}</Typography.Title>
-                  <Row gutter={16}>
+                  <Row gutter={16} className='custom-grid'>
                     {roomNumbersByFloor[floor]
                       .filter(roomNumber => {
                         if (filter === 'booked') return bookedRooms.includes(roomNumber);
@@ -258,7 +287,7 @@ const Rooms = () => {
                             <Card.Grid
                               className={`room-grid ${isBooked ? 'room-grid-booked' : ''} ${isOnHold ? 'room-grid-on-hold' : ''} ${selectedRoom === roomNumber ? 'room-grid-selected' : ''}`}
                               onClick={() => handleRoomClick(roomNumber)}
-                              style={{ backgroundColor: isBooked ? 'red' : isOnHold ? 'yellow' : 'white' }}
+                              style={{ backgroundColor: isBooked ? '#32CD32' : isOnHold ? '#FF8C00' : 'white' }}
                             >
                               {roomNumber}
                             </Card.Grid>
@@ -304,6 +333,15 @@ const Rooms = () => {
                 <Space direction="vertical">
                   <Typography.Text className="room-details-section" type="success">This room is booked.</Typography.Text>
                   <Typography.Paragraph>
+                  <strong>Guest Name:</strong> {bookingDetails[selectedRoom].guestName}
+                  </Typography.Paragraph>
+                  <Typography.Paragraph>
+                  <strong>Guest Age:</strong> {bookingDetails[selectedRoom].guestAge}
+                  </Typography.Paragraph>
+                  <Typography.Paragraph>
+                  <strong>Guest Gender:</strong> {bookingDetails[selectedRoom].guestGender}
+                  </Typography.Paragraph>
+                  <Typography.Paragraph>
                     <strong>Check-In:</strong> {bookingDetails[selectedRoom].checkIn.format('YYYY-MM-DD')}
                   </Typography.Paragraph>
                   <Typography.Paragraph>
@@ -330,12 +368,32 @@ const Rooms = () => {
       </div>
 
       <Modal
-        title="Book Room"
+        title={`Book Room ${selectedRoom}`}
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
+        okText="Confirm Booking"
       >
-        <RangePicker value={dates} onChange={handleDateChange} />
+        <Space direction="vertical" size="large">
+          <RangePicker
+            value={dates}
+            onChange={handleDateChange}
+            format="YYYY-MM-DD"
+            disabledDate={(current) => current && current < moment().startOf('day')}
+          />
+          <Input placeholder="Guest Name" value={guestName} onChange={handleGuestNameChange} />
+          <Input placeholder="Guest Age" value={guestAge} onChange={handleGuestAgeChange} type="number" />
+          <Select
+          placeholder="Select Gender"  // Placeholder will be visible until an option is selected
+          value={guestGender || undefined}  // Undefined value allows placeholder to show
+          onChange={handleGenderChange}
+          style={{ width: '60%' }}
+          >
+          <Option value="Male">Male</Option>
+          <Option value="Female">Female</Option>
+          <Option value="Other">Other</Option>
+        </Select>
+        </Space>
       </Modal>
 
       <Modal

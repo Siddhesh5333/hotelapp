@@ -1,7 +1,8 @@
 import React from 'react';
 import { Select, Space } from 'antd';
-
+import './RoomFilter.css';
 const { Option } = Select;
+
 
 const RoomFilter = ({ onFilterChange, onFloorChange, onRoomTypeChange }) => {
   const floors = ['Ground Floor', 'First Floor', 'Second Floor', 'Third Floor'];
@@ -12,7 +13,7 @@ const RoomFilter = ({ onFilterChange, onFloorChange, onRoomTypeChange }) => {
       <Space>
         {/* Filter for Room Status */}
         <Select
-          placeholder="Select Room Status"
+          placeholder="Room Status"
           style={{ width: 160 }}
           onChange={(value) => onFilterChange(value)}
         >
@@ -24,7 +25,7 @@ const RoomFilter = ({ onFilterChange, onFloorChange, onRoomTypeChange }) => {
 
         {/* Filter for Floor */}
         <Select
-          placeholder="Select Floor"
+          placeholder="Floor"
           style={{ width: 160 }}
           onChange={(value) => onFloorChange(value)}
         >
@@ -38,7 +39,7 @@ const RoomFilter = ({ onFilterChange, onFloorChange, onRoomTypeChange }) => {
 
         {/* Filter for Room Type */}
         <Select
-          placeholder="Select Room Type"
+          placeholder="Room Type"
           style={{ width: 160 }}
           onChange={(value) => onRoomTypeChange(value)}
         >

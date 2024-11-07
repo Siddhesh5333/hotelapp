@@ -1,0 +1,5 @@
+/* This targets the placeholder text color for the Select component */
+.ant-select-selection-placeholder {
+    color: rgb(36, 36, 36) !important;
+  }
+  
