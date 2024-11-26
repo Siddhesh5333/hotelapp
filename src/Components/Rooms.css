@@ -64,23 +64,36 @@
   color: #333;
   transition: transform 0.3s, background-color 0.3s, color 0.3s;
   border-radius: 8px !important;
-  background: linear-gradient(145deg, #f0f0f0, #fafafa);
+  background: linear-gradient(145deg, #9795ff, #fafafa);
   box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.1), -6px -6px 10px rgba(255, 255, 255, 0.8);
 }
 
 .room-grid:hover {
   transform: scale(1.05);
   background-color: #e6f7ff;
-  color: #0073e6;
+  color: #dff9ff;
   box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.15), -6px -6px 12px rgba(255, 255, 255, 0.6);
 }
 
 .room-grid-selected {
   background-color: #cce7ff;
-  border: 2px solid #69c0ff;
+  border: px solid #69c0ff;
   box-shadow: inset 5px 5px 8px rgba(0, 0, 0, 0.15);
 }
 
+.room-grid-booked {
+  background: linear-gradient(145deg, #54ff54, #d0ffd0); /* Green gradient */
+  color: black; /* Ensure text color remains black */
+  font-weight: bold;
+  box-shadow: inset 5px 5px 8px rgba(0, 0, 0, 0.15);
+}
+
+.room-grid-hold {
+  background: linear-gradient(145deg, #FFA500, #ffe4ae); /* Orange gradient */
+  color: black; /* Ensure text color remains black */
+  font-weight: bold;
+  box-shadow: inset 5px 5px 8px rgba(0, 0, 0, 0.15);
+}
 /* Room Details Card */
 .room-details-card {
   text-align: center;

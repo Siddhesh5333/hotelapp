@@ -11,13 +11,13 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const defaultRoomDetails = {
-  name: 'Room',
+  name: 'Room 002',
   type: 'Standard Room',
   description: 'A standard room with basic amenities.',
   amenities: ['Wi-Fi', 'TV'],
   capacity: 2,
   price: '₹ 500/night',
-  image: standard,
+  image: standard, 
 };
 
 const roomDetails = {
@@ -30,8 +30,8 @@ const roomDetails = {
     price: '₹ 1000/night',
     image: delux,
   },
-  '103': {
-    name: 'Room 103',
+  'Delux 008': {
+    name: 'Room 008',
     type: 'Delux Room',
     description: 'A cozy, comfortable room with a modern interior.',
     amenities: ['Wi-Fi', 'TV', 'Mini Fridge'],
@@ -39,7 +39,16 @@ const roomDetails = {
     price: '₹ 1000/night',
     image: delux,
   },
-  '201': {
+  'Delux 105': {
+    name: 'Room 105',
+    type: 'Delux Room',
+    description: 'A cozy, comfortable room with a modern interior.',
+    amenities: ['Wi-Fi', 'TV', 'Mini Fridge'],
+    capacity: 2,
+    price: '₹ 1000/night',
+    image: delux,
+  },
+  'Delux 201': {
     name: 'Room 201',
     type: 'Delux Room',
     description: 'A cozy, comfortable room with a modern interior.',
@@ -48,25 +57,7 @@ const roomDetails = {
     price: '₹ 1000/night',
     image: delux,
   },
-  '301': {
-    name: 'Room 301',
-    type: 'Delux Room',
-    description: 'A cozy, comfortable room with a modern interior.',
-    amenities: ['Wi-Fi', 'TV', 'Mini Fridge'],
-    capacity: 2,
-    price: '₹ 1000/night',
-    image: delux,
-  },
-  '305': {
-    name: 'Room 305',
-    type: 'Delux Room',
-    description: 'A cozy, comfortable room with a modern interior.',
-    amenities: ['Wi-Fi', 'TV', 'Mini Fridge'],
-    capacity: 2,
-    price: '₹ 1000/night',
-    image: delux,
-  },
-  '208': {
+  'Delux 208': {
     name: 'Room 208',
     type: 'Delux Room',
     description: 'A cozy, comfortable room with a modern interior.',
@@ -75,7 +66,43 @@ const roomDetails = {
     price: '₹ 1000/night',
     image: delux,
   },
-  '101': {
+  'Delux 301': {
+    name: 'Room 301',
+    type: 'Delux Room',
+    description: 'A cozy, comfortable room with a modern interior.',
+    amenities: ['Wi-Fi', 'TV', 'Mini Fridge'],
+    capacity: 2,
+    price: '₹ 1000/night',
+    image: delux,
+  },
+  'Delux 308': {
+    name: 'Room 308',
+    type: 'Delux Room',
+    description: 'A cozy, comfortable room with a modern interior.',
+    amenities: ['Wi-Fi', 'TV', 'Mini Fridge'],
+    capacity: 2,
+    price: '₹ 1000/night',
+    image: delux,
+  },
+  'Sweet 004': {
+    name: 'Room 004',
+    type: 'Sweet Room',
+    description: 'Spacious room with beautiful city views.',
+    amenities: ['Wi-Fi', 'TV', 'Balcony'],
+    capacity: 3,
+    price: '₹ 750/night',
+    image: sweet,
+  },
+  'Sweet 005': {
+    name: 'Room 005',
+    type: 'Sweet Room',
+    description: 'Spacious room with beautiful city views.',
+    amenities: ['Wi-Fi', 'TV', 'Balcony'],
+    capacity: 3,
+    price: '₹ 750/night',
+    image: sweet,
+  },
+  'Sweet 101': {
     name: 'Room 101',
     type: 'Sweet Room',
     description: 'Spacious room with beautiful city views.',
@@ -84,8 +111,8 @@ const roomDetails = {
     price: '₹ 750/night',
     image: sweet,
   },
-  '102': {
-    name: 'Room 102',
+  'Sweet 108': {
+    name: 'Room 108',
     type: 'Sweet Room',
     description: 'A comfortable room with essential amenities for a relaxing stay.',
     amenities: ['Wi-Fi', 'TV'],
@@ -93,8 +120,8 @@ const roomDetails = {
     price: '₹ 750/night',
     image: sweet,
   },
-  '202': {
-    name: 'Room 202',
+  'Sweet 205': {
+    name: 'Room 205',
     type: 'Sweet Room',
     description: 'A comfortable room with essential amenities for a relaxing stay.',
     amenities: ['Wi-Fi', 'TV'],
@@ -102,7 +129,7 @@ const roomDetails = {
     price: '₹ 750/night',
     image: sweet,
   },
-  '302': {
+  'Sweet 305': {
     name: 'Room 302',
     type: 'Sweet Room',
     description: 'A comfortable room with essential amenities for a relaxing stay.',
@@ -115,11 +142,12 @@ const roomDetails = {
 };
 
 const roomNumbersByFloor = {
-  'Ground Floor': ['Delux 001', 'Standard 002', '003', '004', '005', '006', '007', '008'],
-  'First Floor': ['101', '102', '103', '104', '105', '106', '107', '108'],
-  'Second Floor': ['201', '202', '203', '204', '205', '206', '207', '208'],
-  'Third Floor': ['301', '302', '303', '304', '305', '306', '307', '308'],
+  'Ground Floor': ['Delux 001', 'Standard 002', 'Standard 003', 'Sweet 004', 'Sweet 005', 'Standard 006', 'Standard 007', 'Delux 008'],
+  'First Floor': ['Sweet 101', 'Standard 102', 'Standard 103', 'Standard 104', 'Delux 105', 'Standard 106', 'Standard 107', 'Sweet 108'],
+  'Second Floor': ['Delux 201', 'Standard 202', 'Standard 203', 'Standard 204', 'Sweet 205', 'Standard 206', 'Standard 207', 'Delux 208'],
+  'Third Floor': ['Delux 301', 'Standard 302', 'Standard 303', 'Standard 304', 'Sweet 305', 'Standard 306', 'Standard 307', 'Delux 308'],
 };
+
 
 const Rooms = () => {
   const [selectedRoom, setSelectedRoom] = useState(null);
@@ -285,12 +313,16 @@ const Rooms = () => {
                         return (
                           <Col key={roomNumber} span={6}>
                             <Card.Grid
-                              className={`room-grid ${isBooked ? 'room-grid-booked' : ''} ${isOnHold ? 'room-grid-on-hold' : ''} ${selectedRoom === roomNumber ? 'room-grid-selected' : ''}`}
-                              onClick={() => handleRoomClick(roomNumber)}
-                              style={{ backgroundColor: isBooked ? '#32CD32' : isOnHold ? '#FF8C00' : 'white' }}
-                            >
-                              {roomNumber}
-                            </Card.Grid>
+                          className={`room-grid ${isBooked ? 'room-grid-booked' : ''} ${isOnHold ? 'room-grid-hold ' : ''} ${selectedRoom === roomNumber ? 'room-grid-selected' : ''}`}
+                          onClick={() => handleRoomClick(roomNumber)}
+                          style={{
+                          backgroundColor: isBooked ? '#32CD32' : isOnHold ? '#FF8C00' : 'green', // Background color logic
+                          color: isOnHold || isBooked ? 'black' : '#333', // Text color adjustment
+                        }}
+                         >
+                        {roomNumber}
+                        </Card.Grid>
+
                           </Col>
                         );
                       })}
