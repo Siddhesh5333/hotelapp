@@ -363,14 +363,14 @@ const Rooms = () => {
 
               {bookedRooms.includes(selectedRoom) && (
                 <Space direction="vertical">
-                  <Typography.Text className="room-details-section" type="success">This room is booked.</Typography.Text>
+                  <Typography.Text className="room-details-section" type="success" style={{ color: 'green' }}>This room is booked.</Typography.Text>
                   <Typography.Paragraph>
                   <strong>Guest Name:</strong> {bookingDetails[selectedRoom].guestName}
                   </Typography.Paragraph>
-                  <Typography.Paragraph>
+                <Typography.Paragraph>
                   <strong>Guest Age:</strong> {bookingDetails[selectedRoom].guestAge}
                   </Typography.Paragraph>
-                  <Typography.Paragraph>
+                <Typography.Paragraph>
                   <strong>Guest Gender:</strong> {bookingDetails[selectedRoom].guestGender}
                   </Typography.Paragraph>
                   <Typography.Paragraph>
@@ -381,7 +381,6 @@ const Rooms = () => {
                   </Typography.Paragraph>
                   <Space>
                     <Button type="primary" onClick={handleRelease}>Release</Button>
-                    <Button onClick={handleHold}>Place on Hold</Button>
                   </Space>
                 </Space>
               )}
@@ -393,7 +392,7 @@ const Rooms = () => {
                 </Space>
               )}
             </Space>
-          ) : (
+          ) :  (
             <Typography.Paragraph>Please select a room to view its details.</Typography.Paragraph>
           )}
         </Card>
